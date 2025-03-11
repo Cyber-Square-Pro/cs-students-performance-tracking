@@ -25,3 +25,21 @@ class User(UserMixin):
         self.id = id
         self.username = username
         self.role = role
+@login_manager.user_loader
+def load_user(user_id):
+    user = get_user_by_id(int(user_id))
+    if user:
+        return User(user[0], user[1], user[3])
+    return None
+
+# Load models
+scaler = joblib.load('models/scaler.pkl')
+reg_models = {
+    'LinearRegression': joblib.load('models/LinearRegression.pkl'),
+    'RandomForestRegressor': joblib.load('models/RandomForestRegressor.pkl')
+}
+clf_models = {
+    'RandomForestClassifier': joblib.load('models/RandomForestClassifier.pkl'),
+    'XGBoost': joblib.load('models/XGBoost.pkl'),
+    'EnsembleClassifier': joblib.load('models/EnsembleClassifier.pkl')
+}
